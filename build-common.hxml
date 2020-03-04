@@ -1,0 +1,4 @@
+--library ammer
+--main Main
+-D ammer.lib.odbc.include=native
+-D ammer.lib.odbc.library=native
