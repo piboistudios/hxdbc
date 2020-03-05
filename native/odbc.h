@@ -13,6 +13,7 @@ extern "C" {
 #include <sqlext.h>
 #include <sqltypes.h>
 #include <stdlib.h>
+#include <stdbool.h>
 	typedef struct {
 		char** errors;
 		char error_str[2048];
@@ -26,7 +27,7 @@ extern "C" {
 		odbc_errors_ptr errors;
 		bool failed_to_connect;
 	} odbc_ctx_t;
-	LIB_EXPORT typedef odbc_ctx_t* odbc_ctx_ptr;
+	typedef odbc_ctx_t* odbc_ctx_ptr;
 	typedef struct {
 		char name[1024];
 		SQLSMALLINT data_type;
@@ -34,7 +35,7 @@ extern "C" {
 		SQLSMALLINT decimal_digits;
 		SQLSMALLINT nullable;
 	} odbc_column_t;
-	LIB_EXPORT typedef odbc_column_t* odbc_column_ptr;
+	typedef odbc_column_t* odbc_column_ptr;
 	typedef struct {
 		SQLHSTMT stmt;
 		SQLSMALLINT num_cols;
@@ -43,7 +44,7 @@ extern "C" {
 		void* last;
 		bool failed_to_execute;
 	} odbc_stmt_t;
-	LIB_EXPORT typedef odbc_stmt_t* odbc_stmt_ptr;
+	typedef odbc_stmt_t* odbc_stmt_ptr;
 
 	LIB_EXPORT odbc_ctx_ptr odbc_connect(char*);
 	LIB_EXPORT char* odbc_get_cnx_str(odbc_ctx_ptr ctx);
@@ -70,7 +71,6 @@ extern "C" {
 	LIB_EXPORT int odbc_get_column_as_unix_timestamp(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT bool odbc_disconnect(odbc_ctx_ptr);
 	LIB_EXPORT int test_sql();
-
 #ifdef __cplusplus
 }
 #endif

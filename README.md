@@ -7,9 +7,7 @@ The design was modeled after the existing [`sys.db.MySql`](https://github.com/Ha
 This library depends on the [`odbc-native`](https://github.com/piboistudios/odbc-native) library
 
 ## Build Steps
-Coming soon... For now, just know that `odbc-native` needs to be built as a .dll and it's .h file (`odbc.h`) needs to be located in a directory identified by `-D ammer.lib.odbc.include` compilation flag (in this case, it is `native`).
-
-You will also need to copy the dll to the same folder that the resultant `ammer_odbc.hdll` file is located at.
+Run `nmake` on `native/Makefile.msvc` to build the native library. The resultant `odbc.dll` will need to be present alongside the `.hl` file at runtime.
 
 ## Usage
 
