@@ -7,7 +7,9 @@ The design was modeled after the existing [`sys.db.MySql`](https://github.com/Ha
 This library depends on the [`odbc-native`](https://github.com/piboistudios/odbc-native) library
 
 ## Build Steps
-Run `nmake` on `native/Makefile.msvc` to build the native library. The resultant `odbc.dll` will need to be present alongside the `.hl` file at runtime.
+Run `nmake` on `native/Makefile.msvc` to build the native library. The resultant `odbc.dll` will need to be present alongside the `.hl` file at runtime. (You may have to modify the Makefile to point to your SDK directory where `odbc32.dll` is located... refer to the existing path for a hint as to where yours might be)
+
+More improvements to come here.
 
 ## Usage
 
