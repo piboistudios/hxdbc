@@ -1,0 +1,14 @@
+{
+    "name": "hxdbc",
+    "url": "https://github.com/piboistudios/hxdbc/",
+    "license": "Public",
+    "tags": ["db","odbc","sql","sql-server","postgre","mysql","mariadb","mongodb"],
+    "description": "Haxe Open Database Connectivity Native Extension",
+    "version": "0.0.1",
+    "classPath": "./",
+    "releasenotes": "Initial release",
+    "contributors": ["piboistudios"],
+    "dependencies": {
+        "ammer": ""
+    }
+}

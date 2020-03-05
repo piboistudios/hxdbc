@@ -1,4 +1,12 @@
-build-common.hxml
+-cp pre-build
+-main PreBuild
+--interp
+--next
+
+--library ammer
+-D ammer.lib.odbc.include=native
+-D ammer.lib.odbc.library=native
+--main Main
 -D ammer.hl.hlInclude=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win\include
 -D ammer.hl.hlLibrary=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win
 --hl bin/hl/sample.hl
