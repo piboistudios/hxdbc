@@ -1,7 +1,7 @@
 package prebuild;
 class PreBuild {
 	public static function main() {
-        final hxml = sys.io.File.getContent("./haxe-libraries/hxdbc.hxml");
+        final hxml = sys.io.File.getContent("./haxe_libraries/hxdbc.hxml");
         final classPathParser = ~/-cp (.*)/gi;
         if(classPathParser.match(hxml)) {
             final path = classPathParser.matched(1);
