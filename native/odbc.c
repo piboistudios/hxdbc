@@ -65,7 +65,7 @@ LIB_EXPORT odbc_ctx_ptr odbc_connect(char* c) {
 
 	SQLSMALLINT outstrlen;
 	SQLCHAR cnx_str[1024];
-	if (SQL_SUCCEEDED(SQLDriverConnect(ret->dbc, NULL, c, SQL_NTS, ret->cnx_str, sizeof(ret->cnx_str), &outstrlen, SQL_DRIVER_COMPLETE))) {
+	if (SQL_SUCCEEDED(SQLDriverConnect(ret->dbc, NULL, c, SQL_NTS, ret->cnx_str, sizeof(ret->cnx_str), &outstrlen, SQL_DRIVER_NOPROMPT))) {
 		ret->failed_to_connect = false;
 	}
 	else {
