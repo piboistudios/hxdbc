@@ -4,9 +4,7 @@
 --next
 
 --library ammer
--D ammer.lib.odbc.include=native
--D ammer.lib.odbc.library=native
+-D ammer.lib.odbc.include=odbc-native
+-D ammer.lib.odbc.library=odbc-native
 --main Main
--D ammer.hl.hlInclude=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win\include
--D ammer.hl.hlLibrary=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win
 --hl bin/hl/sample.hl
