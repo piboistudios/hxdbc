@@ -17,7 +17,7 @@ class PreBuild {
         retVal.projectVer = pathParts[2];
         retVal.projectLoc = pathParts[3];
         retVal.gitHash = "";
-        if(projectLoc.toLowerCase() == "github") {
+        if(retVal.projectLoc.toLowerCase() == "github") {
         	retVal.gitHash = pathParts[4];    
             basePathLength=5;
         }
