@@ -1,6 +1,6 @@
 package sys.db;
 
-import native.OdbcLib;
+import odbc_native.OdbcLib;
 using Lambda;
 class OdbcResultSet implements sys.db.ResultSet {
 	public var length(get, null):Int;

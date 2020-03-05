@@ -1,3 +1,6 @@
 [submodule "odbc-native"]
 	path = odbc-native
 	url = https://github.com/piboistudios/odbc-native.git
+[submodule "odbc_native"]
+	path = odbc_native
+	url = https://github.com/piboistudios/odbc_native.git
