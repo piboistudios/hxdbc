@@ -1,2 +1,1 @@
--cp pre-build
--main PreBuild
+--macro prebuild.PreBuild.main()

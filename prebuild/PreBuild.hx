@@ -1,3 +1,4 @@
+package prebuild;
 class PreBuild {
 	public static function main() {
         final hxml = sys.io.File.getContent("./haxe-libraries/hxdbc.hxml");
