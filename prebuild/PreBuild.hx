@@ -5,6 +5,12 @@ using StringTools;
 class PreBuild {
     static var lixLibCachePath = Sys.getEnv("HAXE_LIBCACHE");
 	public static function run(config:Dynamic) {
+        if(config.nativePath == null) {
+            var ammerLibPath = 'ammer.lib.${config.nativeLibName}.library';
+            if(haxe.macro.Context.defined(ammerLibPath)) {
+                config.nativePath = haxe.macro.Context.definedValue(ammerLibPath);
+            }
+        }
         if(lixLibCachePath != null && lixLibCachePath.length != 0) {
 
             var lixHxmlPath = './${config.haxeLibsDir}/${config.haxelib}.hxml';
