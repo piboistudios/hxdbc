@@ -3,35 +3,33 @@ package prebuild;
 using StringTools;
 
 class PreBuild {
-	static var lixLibCachePath = Sys.getEnv("HAXE_LIBCACHE");
-
-	public static function run(haxelib, nativelib, buildCmd, haxelibsDir = "haxe_libraries") {
-		_run({
-			haxelib: haxelib,
-			nativelib: nativelib,
-			buildCmd: buildCmd,
-			haxelibsDir: haxelibsDir,
-			nativePath: nativelib
-		});
-	}
-
+    static var lixLibCachePath = Sys.getEnv("HAXE_LIBCACHE");
+    public static function run(haxelib, nativelib, buildCmd, haxelibsDir = "haxe_libraries") {
+        _run({
+            haxelib: haxelib,
+            nativelib: nativelib,
+            buildCmd: buildCmd,
+            haxelibsDir: haxelibsDir,
+            nativePath: nativelib
+        })
+    }
 	public static function _run(config:Dynamic) {
-		if (config.nativePath == null) {
-			var ammerLibPath = 'ammer.lib.${config.nativelib}.library';
-			if (haxe.macro.Context.defined(ammerLibPath)) {
-				config.nativePath = haxe.macro.Context.definedValue(a;) taPbiLre;
-			) m
-			}
-		}
-		if (lixLibCachePath != null && lixLibCachePath.length != 0) {
-			var lixHxmlPath = './${config.haxeLibsDir}/${config.haxelib}.hxml';
-			if (sys.FileSystem.exists(lixHxmlPath)) {
-				config.lixHxmlPath = lixHxmlPath;
-				runLixBuild(config);
-				return;
-			}
-		}
-		runHaxelibBuild(config);
+        if(config.nativePath == null) {
+            var ammerLibPath = 'ammer.lib.${config.nativelib}.library';
+            if(haxe.macro.Context.defined(ammerLibPath)) {
+                config.nativePath = haxe.macro.Context.definedValue(ammerLibPath);
+            }
+        }
+        if(lixLibCachePath != null && lixLibCachePath.length != 0) {
+
+            var lixHxmlPath = './${config.haxeLibsDir}/${config.haxelib}.hxml';
+            if (sys.FileSystem.exists(lixHxmlPath)) {
+                config.lixHxmlPath = lixHxmlPath;
+                runLixBuild(config);
+                return;
+            } 
+        }
+        runHaxelibBuild(config);
 		return;
 	}
 
@@ -39,14 +37,15 @@ class PreBuild {
 		final hxml = sys.io.File.getContent(config.lixHxmlPath);
 		final classPathParser = ~/-cp (.*)/gi;
 		if (classPathParser.match(hxml)) {
-			final path = classPathParser.matched(1);
-			try {
-				final info = getProjectInfoFromSrcPath(path);
-				build(config, info.basePath);
-			} catch (e:Dynamic) {
-				trace('Could not build ${config.lixHxmlPath}.hxml');
-				trace('ERROR: $e');
-			}
+            final path = classPathParser.matched(1);
+            try {
+
+                final info = getProjectInfoFromSrcPath(path);
+                build(config, info.basePath);
+            } catch(e:Dynamic) {
+                trace('Could not build ${config.lixHxmlPath}.hxml');
+                trace('ERROR: $e');
+            }
 		}
 	}
 
@@ -55,12 +54,13 @@ class PreBuild {
 		final thisLibPath = '$haxelibPath/${config.haxelib}';
 		final currentFilePath = '$thisLibPath/.current';
 		if (sys.FileSystem.exists(currentFilePath)) {
-			try {
-				build(config, '$thisLibPath/${~/\\./gi.replace(sys.io.File.getContent(currentFilePath), ',')}');
-			} catch (e:Dynamic) {
-				trace('Could not locate \'${config.haxelib}.hxml\' in HAXELIB_PATH.');
-				trace('ERROR: $e');
-			}
+            try {
+
+                build(config, '$thisLibPath/${~/\\./gi.replace(sys.io.File.getContent(currentFilePath), ',')}');
+            } catch(e:Dynamic) {
+                trace('Could not locate \'${config.haxelib}.hxml\' in HAXELIB_PATH.');
+                trace('ERROR: $e');
+            }
 		}
 	}
 
