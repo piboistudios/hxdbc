@@ -1,6 +1,0 @@
-{
-    "haxelib": "hxdbc",
-    "nativelib": "odbc",
-    "buildCmd": "make /f Makefile.msvc",
-    "haxelibsDir": "haxe_libraries"
-}
