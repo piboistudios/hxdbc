@@ -1,4 +1,4 @@
---macro prebuild.PreBuild.run({ "haxelib": 'hxdbc', "nativelib": "odbc", "buildCmd": 'make /f Makefile.msvc', "haxelibsDir": "haxe_libraries"})
+--macro prebuild.PreBuild.run("config.json")
 
 # because this will run in the user's cwd, we have to provide all the information we can about this library so it can be found and built on the user's computer
 # haxelib - the macro context needs to know the name of the haxe library it's doing this Prebuild for so it can find the hxml and 
