@@ -3,8 +3,6 @@
 -lib ammer
 -lib anvil
 --macro build.Build.attach()
--D ammer.hl.hlInclude=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win\include
--D ammer.hl.hlLibrary=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win
 -cp tests
 -main RunTests
 
