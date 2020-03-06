@@ -4,7 +4,8 @@ using StringTools;
 
 class PreBuild {
     static var lixLibCachePath = Sys.getEnv("HAXE_LIBCACHE");
-	public static function run(config:Dynamic) {
+	public static function run(_config:String = "config.json") {
+        final config = sys.io.File.getContent(_config);
         if(config.nativePath == null) {
             var ammerLibPath = 'ammer.lib.${config.nativelib}.library';
             if(haxe.macro.Context.defined(ammerLibPath)) {
