@@ -11,7 +11,7 @@ class PreBuild {
             buildCmd: buildCmd,
             haxelibsDir: haxelibsDir,
             nativePath: nativelib
-        })
+        });
     }
 	public static function _run(config:Dynamic) {
         if(config.nativePath == null) {
