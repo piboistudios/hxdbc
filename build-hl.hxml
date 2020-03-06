@@ -1,7 +1,7 @@
 
 --library ammer
--D ammer.lib.odbc.include=native
--D ammer.lib.odbc.library=native
+-D ammer.lib.odbc.include=odbc_native
+-D ammer.lib.odbc.library=odbc_native
 -cp .
 --main Main
 -D ammer.hl.hlInclude=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win\include
