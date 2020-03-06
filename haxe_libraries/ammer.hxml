@@ -1,4 +1,3 @@
-
 # @install: lix --silent download "gh://github.com/aurel300/ammer#85ad75e3ec69d59a4cb051ca4385b77e7285cdc8" into ammer/0.0.1/github/85ad75e3ec69d59a4cb051ca4385b77e7285cdc8
 -cp ${HAXE_LIBCACHE}/ammer/0.0.1/github/85ad75e3ec69d59a4cb051ca4385b77e7285cdc8/src/
 -D ammer=0.0.1

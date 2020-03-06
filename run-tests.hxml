@@ -1,0 +1,14 @@
+-lib tink_unittest
+-lib tink_core
+-lib ammer
+-lib anvil
+--macro build.Build.attach()
+-D ammer.hl.hlInclude=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win\include
+-D ammer.hl.hlLibrary=C:\Users\gabriel.hayes\Desktop\hl-1.10.0-win
+-cp tests
+-main RunTests
+
+
+--hl bin/hl/sample.hl
+--cmd "cd bin/hl"
+--cmd "hl sample.hl"
