@@ -3,13 +3,10 @@ HXDBC is a native-extension library for the [ammer](https://github.com/Aurel300/
 
 The design was modeled after the existing [`sys.db.MySql`](https://github.com/HaxeFoundation/haxe/blob/4.0.5/std/hl/_std/sys/db/Mysql.hx) interface that exists for the HashLink platform.
 
-## Dependencies
-This library depends on the [`odbc-native`](https://github.com/piboistudios/odbc-native) library
+## Building
+This project uses Anvil to initialize; it will automatically build assuming the shell environment is set up and the user is running Windows and has MSVC installed; the user will need to run `haxelib` from a `VsDevCmd.bat` (Developer Command Prompt for VS 2019) shell environment.
 
-## Build Steps
-Run `nmake` on `native/Makefile.msvc` to build the native library. The resultant `odbc.dll` will need to be present alongside the `.hl` file at runtime. (You may have to modify the Makefile to point to your SDK directory where `odbc32.dll` is located... refer to the existing path for a hint as to where yours might be)
-
-More improvements to come here.
+The haxe compilation server may also build the native libraries for you, assuming you have run `VsDevCmd.bat` you should be able to build this, and any project depending on it, as if it were an ordinary Haxe project.
 
 ## Usage
 
