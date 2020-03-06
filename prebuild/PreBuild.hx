@@ -6,7 +6,7 @@ class PreBuild {
     static var lixLibCachePath = Sys.getEnv("HAXE_LIBCACHE");
 	public static function run(config:Dynamic) {
         if(config.nativePath == null) {
-            var ammerLibPath = 'ammer.lib.${config.nativeLibName}.library';
+            var ammerLibPath = 'ammer.lib.${config.nativelib}.library';
             if(haxe.macro.Context.defined(ammerLibPath)) {
                 config.nativePath = haxe.macro.Context.definedValue(ammerLibPath);
             }

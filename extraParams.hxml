@@ -1,7 +1,9 @@
---macro prebuild.PreBuild.run({ "haxelib": 'hxdbc', "nativePath": 'odbc_native',"nativeLibName", "buildCmd": 'make /f Makefile.msvc', "haxelibsDir": "haxe_libraries"})
+--macro prebuild.PreBuild.run({ "haxelib": 'hxdbc', "nativelib": "odbc", "buildCmd": 'make /f Makefile.msvc', "haxelibsDir": "haxe_libraries"})
 
 # because this will run in the user's cwd, we have to provide all the information we can about this library so it can be found and built on the user's computer
 # haxelib - the macro context needs to know the name of the haxe library it's doing this Prebuild for so it can find the hxml and 
 # buildCmd - the command to run once the native project path has been found and navigated to. The Cwd should be the path where your native code is when this cmd is run
 # haxelibsDir - this is where your lix hxml files are. This is only needed if you have lix installed and haxe_libraries is not where they are. This is generally not needed
+# nativelib - The name of the native library; should the be same as the name given to Ammer.
+# nativePath - The directory of the native library; in case the Ammer macro cannot be resolved from nativelib.
 # this will attempt to fallback and check HAXELIB_PATH if lix is not installed or the lix library cannot be found
