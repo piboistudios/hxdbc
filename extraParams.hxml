@@ -1,3 +1,2 @@
--D ammer.lib.odbc.include=odbc_native
--D ammer.lib.odbc.library=odbc_native
---macro prebuild.PreBuild.run("hxdbc", "odbc_native", "nmake /f Makefile.msvc")
+-lib anvil
+--macro build.Build.attach()
