@@ -1,3 +1,4 @@
+workspace.hxml
 -lib tink_unittest
 -lib tink_core
 -lib ammer

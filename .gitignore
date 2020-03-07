@@ -23,3 +23,5 @@ bin/**
 */*/*.pdb
 */*/*.ipdb
 */*/*.obj
+
+workspace.hxml
