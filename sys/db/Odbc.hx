@@ -5,7 +5,11 @@ import haxe.io.Bytes;
 using Lambda;
 
 import sys.db.OdbcLib;
-class SizeOfReturn {function new(){}}
+
+class SizeOfReturn {
+	function new() {}
+}
+
 class OdbcResultSet implements sys.db.ResultSet {
 	public var length(get, null):Int;
 	public var nfields(get, null):Int;
@@ -61,10 +65,9 @@ class OdbcResultSet implements sys.db.ResultSet {
 				try {
 					if (boolTypes.indexOf(dt) != -1)
 						value = stmt.get_column_as_bool(i);
-					else if (true || binaryTypes.indexOf(dt) != -1) {
+					else if (binaryTypes.indexOf(dt) != -1) {
 						value = OdbcLib.get_column_as_bytes(stmt, i);
-					}
-					else if (floatTypes.indexOf(dt) != -1)
+					} else if (floatTypes.indexOf(dt) != -1)
 						value = stmt.get_column_as_float(i);
 					else if (intTypes.indexOf(dt) != -1)
 						value = stmt.get_column_as_int(i);
@@ -72,6 +75,8 @@ class OdbcResultSet implements sys.db.ResultSet {
 						value = stmt.get_column_as_string(i);
 					else if (dateTypes.indexOf(dt) != -1)
 						value = Date.fromTime(stmt.get_column_as_unix_timestamp(i));
+					else
+						throw 'ODBC Native Error: Unable to resolve type: $dt';
 				} catch (ex:Dynamic) {
 					throw 'ODBC Native Error: $ex';
 				}
