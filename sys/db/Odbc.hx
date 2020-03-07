@@ -5,7 +5,7 @@ import haxe.io.Bytes;
 using Lambda;
 
 import sys.db.OdbcLib;
-
+class SizeOfReturn {function new(){}}
 class OdbcResultSet implements sys.db.ResultSet {
 	public var length(get, null):Int;
 	public var nfields(get, null):Int;
@@ -48,25 +48,36 @@ class OdbcResultSet implements sys.db.ResultSet {
 	static var intTypes = [4, 5, (4 + (-22))];
 	static var stringTypes = [-11, 12, 1];
 	static var dateTypes = [91, 92, 93];
+	static var binaryTypes = [(-2)];
 	static var rowIndex = 1;
 
-	function result_next(stmt:OdbcStmtCtx):Dynamic {
+	function result_next(stmt:OdbcStmtCtx):Dynamic @:privateAccess {
 		if (stmt.fetch_next()) {
 			var row:haxe.DynamicAccess<Dynamic> = {};
 			for (i in 1...stmt.get_num_cols() + 1) {
 				final dt = stmt.get_column_datatype(i);
 				final name = stmt.get_column_name(i);
 				var value:Dynamic = null;
-				if (boolTypes.indexOf(dt) != -1)
-					value = stmt.get_column_as_bool(i);
-				else if (floatTypes.indexOf(dt) != -1)
-					value = stmt.get_column_as_float(i);
-				else if (intTypes.indexOf(dt) != -1)
-					value = stmt.get_column_as_int(i);
-				else if (stringTypes.indexOf(dt) != -1)
-					value = stmt.get_column_as_string(i);
-				else if (dateTypes.indexOf(dt) != -1)
-					value = Date.fromTime(stmt.get_column_as_unix_timestamp(i));
+				try {
+					if (boolTypes.indexOf(dt) != -1)
+						value = stmt.get_column_as_bool(i);
+					else if (binaryTypes.indexOf(dt) != -1) {
+						stmt.store_stmt();
+						value = OdbcLib.get_column_as_bytes(i);
+					}
+					else if (floatTypes.indexOf(dt) != -1)
+						value = stmt.get_column_as_float(i);
+					else if (intTypes.indexOf(dt) != -1)
+						value = stmt.get_column_as_int(i);
+					else if (stringTypes.indexOf(dt) != -1)
+						value = stmt.get_column_as_string(i);
+					else if (dateTypes.indexOf(dt) != -1)
+						value = Date.fromTime(stmt.get_column_as_unix_timestamp(i));
+				} catch (ex:Dynamic) {
+					throw 'ODBC Native Error: $ex';
+				}
+				if (r.query_failed())
+					throw r.get_stmt_errors();
 				row[name] = value;
 			}
 			return row;

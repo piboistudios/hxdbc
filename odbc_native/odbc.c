@@ -206,6 +206,23 @@ LIB_EXPORT bool odbc_get_column_as_bool(odbc_stmt_ptr stmt, int i) {
 		return false;
 	}
 }
+odbc_stmt_ptr stored;
+LIB_EXPORT char* odbc_store_stmt(odbc_stmt_ptr stmt) {
+	stored = stmt;
+}
+LIB_EXPORT char* odbc_get_column_as_bytes(int i, SQLLEN *size) {
+	odbc_column_ptr column = stored->columns[i];
+	char out[1024 * 4];
+	SQLRETURN result = SQLGetData(stored->stmt, i, SQL_C_BINARY, &out, sizeof(char) * column->size, &size);
+	if (SQL_SUCCEEDED(result)) {
+		stored->last = &out ;
+		return (char*)stored->last;
+	}
+	else {
+		column_fetch_error(stored);
+		return out;
+	}
+}
 LIB_EXPORT char* odbc_get_column_as_string(odbc_stmt_ptr stmt, int i) {
 	odbc_column_ptr column = stmt->columns[i];
 	SQLLEN size;
@@ -275,6 +292,7 @@ LIB_EXPORT double odbc_get_column_as_double(odbc_stmt_ptr stmt, int i) {
 		return 0;
 	}
 }
+
 LIB_EXPORT int odbc_get_column_as_unix_timestamp(odbc_stmt_ptr stmt, int i) {
 	SQL_TIMESTAMP_STRUCT* out = (SQL_TIMESTAMP_STRUCT*)malloc(sizeof(SQL_TIMESTAMP_STRUCT));
 	SQLLEN size;

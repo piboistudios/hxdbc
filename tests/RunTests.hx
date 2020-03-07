@@ -45,11 +45,11 @@ class BasicTest {
 
 	public function test_create_table() {
 		return assert(try {
-			cnx.request('CREATE TABLE CUSTOMER (
+			cnx.request("CREATE TABLE CUSTOMER (
                 AccountNo AUTOINCREMENT PRIMARY KEY,
                 Name varchar(64) NOT NULL,
                 AddressId INT NOT NULL
-            )');
+            )");
 			true;
 		} catch (e:Dynamic) {
 			trace(e);
@@ -58,8 +58,29 @@ class BasicTest {
 	}
 
 	public function test_insert() {
+		final insert = (record:{name:String, addressId:Int}) -> asserts.assert(try {
+			trace(cnx.request('INSERT INTO CUSTOMER (Name, AddressId) VALUES (\'${record.name}\', ${record.addressId})').getIntResult(1));
+			true;
+		} catch (e:Dynamic) {
+			trace(e);
+			false;
+		});
+		final metaSyntacticVars = [
+			'foobar', 'foo', 'bar', 'baz', 'qux', 'quux', 'quuz', 'corge', 'grault', 'graply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud'
+		];
+		final records = metaSyntacticVars.map(name -> ({
+			name: name,
+			addressId: Std.int(Math.random() * 100)
+		}));
+		for (record in records)
+			insert(record);
+		asserts.done();
+		return asserts;
+	}
+
+	public function test_select() {
 		return assert(try {
-			trace(cnx.request('INSERT INTO CUSTOMER (Name, AddressId) VALUES (\'Test\', 1)'));
+			trace(cnx.request('SELECT * FROM CUSTOMER').results());
 			true;
 		} catch (e:Dynamic) {
 			trace(e);
