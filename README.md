@@ -1,5 +1,5 @@
-# HXDBC
-HXDBC is a native-extension library for the [ammer](https://github.com/Aurel300/ammer) FFI/stub code generator.
+# HxDBC
+HxDBC is a native-extension library for the [ammer](https://github.com/Aurel300/ammer) FFI/stub code generator.
 
 The design was modeled after the existing [`sys.db.MySql`](https://github.com/HaxeFoundation/haxe/blob/4.0.5/std/hl/_std/sys/db/Mysql.hx) interface that exists for the HashLink platform.
 
