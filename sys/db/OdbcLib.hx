@@ -34,6 +34,6 @@ class OdbcStmtCtx extends Pointer<"odbc_stmt_t", OdbcLib> {
     public function get_column_as_uint(_:ammer.ffi.This, i:Int):UInt;
     public function get_column_as_float(_:ammer.ffi.This, i:Int):Float;
     public function get_column_as_double(_:ammer.ffi.This, i:Int):Float;
-    
+    // public function store_stmt(_:ammer.ffi.This):Void;
     public function get_column_as_unix_timestamp(_:ammer.ffi.This, i:Int):Int;
 }
