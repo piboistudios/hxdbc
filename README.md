@@ -38,4 +38,4 @@ class Main {
 
 ## Proof of Concept:
 
-![POC](/poc.PNG)
+![POC](/poc.PNG?raw=true)
