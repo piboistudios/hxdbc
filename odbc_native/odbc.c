@@ -206,17 +206,21 @@ LIB_EXPORT bool odbc_get_column_as_bool(odbc_stmt_ptr stmt, int i) {
 		return false;
 	}
 }
+// see https://github.com/Aurel300/ammer/issues/32
 odbc_stmt_ptr stored;
 LIB_EXPORT char* odbc_store_stmt(odbc_stmt_ptr stmt) {
 	stored = stmt;
 }
-LIB_EXPORT char* odbc_get_column_as_bytes(int i, SQLLEN *size) {
+LIB_EXPORT unsigned char* odbc_get_column_as_bytes(int i, size_t *ret_size) {
 	odbc_column_ptr column = stored->columns[i];
-	char out[1024 * 4];
+	unsigned char out[1024 * 4];
+	SQLLEN size;
 	SQLRETURN result = SQLGetData(stored->stmt, i, SQL_C_BINARY, &out, sizeof(char) * column->size, &size);
 	if (SQL_SUCCEEDED(result)) {
-		stored->last = &out ;
-		return (char*)stored->last;
+		unsigned char *ret = malloc(size*sizeof(char));
+		for(int i =0;i<size;i++) ret[i] = out[i];
+		*ret_size = size;
+		return ret;
 	}
 	else {
 		column_fetch_error(stored);
