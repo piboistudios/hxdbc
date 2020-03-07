@@ -1,8 +1,10 @@
 package sys.db;
-import haxe.io.Bytes;
-using Lambda;
-import sys.db.OdbcLib;
 
+import haxe.io.Bytes;
+
+using Lambda;
+
+import sys.db.OdbcLib;
 
 class OdbcResultSet implements sys.db.ResultSet {
 	public var length(get, null):Int;
@@ -12,8 +14,8 @@ class OdbcResultSet implements sys.db.ResultSet {
 	private var cache:Dynamic;
 
 	function new(r:OdbcStmtCtx) {
-        if(r.query_failed())
-            throw r.get_stmt_errors();
+		if (r.query_failed())
+			throw r.get_stmt_errors();
 		this.r = r;
 	}
 
@@ -89,6 +91,7 @@ class OdbcResultSet implements sys.db.ResultSet {
 		return null;
 		#end
 	}
+
 	public function getStringResult(n:Int):String {
 		return r.get_column_as_string(n);
 	}
@@ -107,32 +110,38 @@ class OdbcResultSet implements sys.db.ResultSet {
 }
 
 class OdbcConnection implements Connection {
-    var h:OdbcCtx;
-    var _c:String;
-    public var connectionString(get, never):String;
-    var _p:Map<String,String>;
-    public var parameters(get,never):Map<String,String>;
-    public function get_connectionString() {
-        if(_c == null)
-            _c = h.get_cnx_str();
-        return _c;
-    }
-    public function get_parameters() {
-        if(_p == null)
-            _p = connectionString.split(';').fold((param:String, map:Map<String,String>) -> {
-                final paramParts = param.split('=');
-                final paramName = paramParts[0];
-                final paramValue = paramParts[1];
-                map[paramName] = paramValue;
-                return map;
-            }, new Map<String,String>());
-        return _p;
-    }
+	var h:OdbcCtx;
+	var _c:String;
+
+	public var connectionString(get, never):String;
+
+	var _p:Map<String, String>;
+
+	public var parameters(get, never):Map<String, String>;
+
+	public function get_connectionString() {
+		if (_c == null)
+			_c = h.get_cnx_str();
+		return _c;
+	}
+
+	public function get_parameters() {
+		if (_p == null)
+			_p = connectionString.split(';').fold((param : String, map : Map<String, String>) -> {
+				final paramParts = param.split('=');
+				final paramName = paramParts[0];
+				final paramValue = paramParts[1];
+				map[paramName] = paramValue;
+				return map;
+			}, new Map<String, String>());
+		return _p;
+	}
+
 	function new(h:OdbcCtx) {
-        // TODO: Check if h failed to connect, throw error if it did
-        if(h.cnx_failed()) {
-            throw h.get_ctx_errors();
-        }
+		// TODO: Check if h failed to connect, throw error if it did
+		if (h.cnx_failed()) {
+			throw h.get_ctx_errors();
+		}
 		this.h = h;
 	}
 
@@ -181,8 +190,7 @@ class OdbcConnection implements Connection {
 
 	public function dbName() {
 		return parameters["DATABASE"];
-    }
-    
+	}
 
 	public function startTransaction() {
 		request("START TRANSACTION");

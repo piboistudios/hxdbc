@@ -2,5 +2,6 @@
     "ammerLib": "odbc",
     "nativePath": "odbc_native",
     "buildCmd": "nmake /f Makefile.msvc",
+    "alwaysRebuild": true,
     "verbose":true
 }

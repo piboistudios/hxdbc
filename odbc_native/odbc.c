@@ -16,13 +16,14 @@ void extract_error(
 	SQLCHAR      text[256];
 	SQLSMALLINT  len;
 	SQLRETURN    ret;
-	
+	// printf("num_errors: %ld", ctx->num_errors);
 	int ei = ctx->num_errors;
 	
 
 	ctx->errors[ei] = (char*)malloc(sizeof(char) * 1024);
+	// printf("error?\r\n\r\n");
 	sprintf_s(ctx->errors[ei], 1024, "\nThe driver reported the following diagnostics whilst running %s\n\n", fn);
-	printf("extract_errors: %s", ctx->errors[ei]);
+	// printf("extract_errors: %s", ctx->errors[ei]);
 	ei++;
 	do
 	{
@@ -31,7 +32,7 @@ void extract_error(
 			sizeof(text), &len);
 		if (SQL_SUCCEEDED(ret)) {
 			sprintf_s(ctx->errors[ei], 1024, "state: %s index: %ld native: %ld text: %s\r\n", state, i, native, text);
-			printf("extract_errors: %s", ctx->errors[ei]);
+			// printf("extract_errors: %s", ctx->errors[ei]);
 			ei++;
 		}
 	} while (ret == SQL_SUCCESS);
@@ -44,22 +45,23 @@ LIB_EXPORT odbc_ctx_ptr odbc_connect(char* c) {
 	ret->errors = (odbc_errors_t*)malloc(sizeof(odbc_errors_t));
 	ret->errors->num_errors = 0;
 	ret->errors->errors = (char**)malloc(sizeof(char) * 1024 * 16);
+	
 	if (!SQL_SUCCEEDED(SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &ret->env))) {
 		ret->failed_to_connect = true;
 		extract_error(ret->errors, (char*)"SQLAllocHandle", ret->env, SQL_HANDLE_ENV);
-		printf("Unable to allocate environment handle.");
+		// printf("Unable to allocate environment handle.");
 		return ret;
 	}
 	if (!SQL_SUCCEEDED(SQLSetEnvAttr(ret->env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0))) {
 		ret->failed_to_connect = true;
 		extract_error(ret->errors, (char*)"SQLSetEnvAttr", ret->env, SQL_HANDLE_ENV);
-		printf("Unable to set ODBC Version (to version 3)");
+		// printf("Unable to set ODBC Version (to version 3)");
 		return ret;
 	}
 	if (!SQL_SUCCEEDED(SQLAllocHandle(SQL_HANDLE_DBC, ret->env, &ret->dbc))) {
 		ret->failed_to_connect = true;
 		extract_error(ret->errors, (char*)"SQLAllocHandle", ret->dbc, SQL_HANDLE_DBC);
-		printf("Unable to allocate DBC handle.");
+		// printf("Unable to allocate DBC handle.");
 		return ret;
 	}
 
@@ -108,23 +110,28 @@ LIB_EXPORT odbc_stmt_ptr odbc_stmt_reference(void) {
 }
 LIB_EXPORT odbc_stmt_ptr odbc_execute(odbc_ctx_ptr ctx, char* stmt) {
 	odbc_stmt_ptr ret = (odbc_stmt_ptr)malloc(sizeof(odbc_stmt_t));
-
+	ret->errors = (odbc_errors_t*)malloc(sizeof(odbc_errors_t));
+	ret->errors->num_errors = 0;
+	ret->errors->errors = (char**)malloc(sizeof(char) * 1024 * 16);
+	// printf("Allocating statement handle\r\n");
 	ret->failed_to_execute = !SQL_SUCCEEDED(SQLAllocHandle(SQL_HANDLE_STMT, ctx->dbc, &ret->stmt));
 	if (ret->failed_to_execute) {
 
 		extract_error(ret->errors, (char*)"SQLAllocHandle", ret->stmt, SQL_HANDLE_STMT);
 		return ret;
 	}
+	// printf("Executing direct\r\n");
 	ret->failed_to_execute = !SQL_SUCCEEDED(SQLExecDirect(ret->stmt, stmt, SQL_NTS));
 	if (ret->failed_to_execute) {
-
+		// printf("errerererrereror");
 		extract_error(ret->errors, (char*)"SQLExecDirect", ret->stmt, SQL_HANDLE_STMT);
+		// printf("%s\r\n", odbc_get_stmt_errors(ret));
 		SQLFreeHandle(SQL_HANDLE_STMT, ret->stmt);
 		return ret;
 	}
 	else {
-
 		SQLNumResultCols(ret->stmt, &ret->num_cols);
+		// printf("Getting column info for %ld columns\r\n", ret->num_cols);
 		ret->columns = (odbc_column_ptr*)malloc(ret->num_cols * sizeof(odbc_column_t));
 
 		for (int i = 1; i <= ret->num_cols; i++) {
@@ -132,8 +139,8 @@ LIB_EXPORT odbc_stmt_ptr odbc_execute(odbc_ctx_ptr ctx, char* stmt) {
 			odbc_column_ptr column = ret->columns[i];
 			SQLCHAR col_name[1024];
 			SQLSMALLINT col_name_length;
-
 			SQLDescribeCol(ret->stmt, i, column->name, sizeof(column->name), &col_name_length, &column->data_type, &column->size, &column->decimal_digits, &column->nullable);
+			// printf("Describe col: %s, %ld\r\n", column->name, column->data_type);
 
 		
 
@@ -225,7 +232,7 @@ LIB_EXPORT int odbc_get_column_as_int(odbc_stmt_ptr stmt, int i) {
 	}
 	else {
 		column_fetch_error(stmt);
-		printf("Column fetch error: %s", odbc_get_errors(stmt->errors));
+		// printf("Column fetch error: %s", odbc_get_errors(stmt->errors));
 		return -1;
 	}
 }
@@ -315,8 +322,8 @@ LIB_EXPORT int test_sql() {
 		driver, sizeof(driver), &driver_ret,
 		attr, sizeof(attr), &attr_ret))) {
 		direction = SQL_FETCH_NEXT;
-		printf("%s - %s - %s - %s\n", (char*)driver, (char*)attr, sizeof(driver), sizeof(ret));
-		if (ret == SQL_SUCCESS_WITH_INFO) printf("\tdata truncation\n");
+		// printf("%s - %s - %s - %s\n", (char*)driver, (char*)attr, sizeof(driver), sizeof(ret));
+		// if (ret == SQL_SUCCESS_WITH_INFO) // printf("\tdata truncation\n");
 	}
 	return 0;
 }
@@ -330,7 +337,7 @@ LIB_EXPORT int test_sql() {
 // 	switch (ul_reason_for_call)
 // 	{
 // 	case DLL_PROCESS_ATTACH:
-// 		printf("ODBC attached w00t!\n");
+// 		// printf("ODBC attached w00t!\n");
 // 	case DLL_THREAD_ATTACH:
 // 	case DLL_THREAD_DETACH:
 // 	case DLL_PROCESS_DETACH:

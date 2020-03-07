@@ -28,7 +28,17 @@ class BasicTest {
 			cnx = sys.db.Odbc.connect(dsn);
 			true;
 		} catch (e:Dynamic) {
-			throw e;
+			trace(e);
+			false;
+		});
+	}
+
+	public function test_drop_table() {
+		return assert(try {
+			cnx.request('DROP TABLE CUSTOMER');
+			true;
+		} catch (e:Dynamic) {
+			trace(e);
 			false;
 		});
 	}
@@ -36,23 +46,23 @@ class BasicTest {
 	public function test_create_table() {
 		return assert(try {
 			cnx.request('CREATE TABLE CUSTOMER (
-                AccountNo INT AUTOINCREMENT  NOT NULL PRIMARY KEY,
+                AccountNo AUTOINCREMENT PRIMARY KEY,
                 Name varchar(64) NOT NULL,
                 AddressId INT NOT NULL
             )');
 			true;
 		} catch (e:Dynamic) {
-			throw e;
+			trace(e);
 			false;
 		});
 	}
 
 	public function test_insert() {
 		return assert(try {
-			trace(cnx.request('INSERT INTO CUSTOMER VALUES (1, "Test", -1)'));
+			trace(cnx.request('INSERT INTO CUSTOMER (Name, AddressId) VALUES (\'Test\', 1)'));
 			true;
 		} catch (e:Dynamic) {
-			throw e;
+			trace(e);
 			false;
 		});
 	}
