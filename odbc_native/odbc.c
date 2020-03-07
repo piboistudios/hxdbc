@@ -206,56 +206,43 @@ LIB_EXPORT bool odbc_get_column_as_bool(odbc_stmt_ptr stmt, int i) {
 		return false;
 	}
 }
-// see https://github.com/Aurel300/ammer/issues/32
-odbc_stmt_ptr stored;
-LIB_EXPORT char* odbc_store_stmt(odbc_stmt_ptr stmt) {
-	stored = stmt;
-}
-LIB_EXPORT unsigned char* odbc_get_column_as_bytes(int i, size_t *ret_size) {
-	odbc_column_ptr column = stored->columns[i];
+LIB_EXPORT unsigned char* odbc_get_column_as_bytes(odbc_stmt_ptr stmt, int i, size_t *ret_size) {
+	odbc_column_ptr column = stmt->columns[i];
 	unsigned char out[1024 * 4];
 	SQLLEN size;
-	SQLRETURN result = SQLGetData(stored->stmt, i, SQL_C_BINARY, &out, sizeof(char) * column->size, &size);
-	if (SQL_SUCCEEDED(result)) {
-		unsigned char *ret = malloc(size*sizeof(char));
-		for(int i =0;i<size;i++) ret[i] = out[i];
-		*ret_size = size;
-		return ret;
+	SQLRETURN result = SQLGetData(stmt->stmt, i, SQL_C_BINARY, &out, sizeof(char) * column->size, &size);
+	if (!SQL_SUCCEEDED(result)) {
+		column_fetch_error(stmt);	
 	}
-	else {
-		column_fetch_error(stored);
-		return out;
-	}
+	*ret_size = size;
+	return out;
 }
 LIB_EXPORT char* odbc_get_column_as_string(odbc_stmt_ptr stmt, int i) {
 	odbc_column_ptr column = stmt->columns[i];
 	SQLLEN size;
 	char out[1024 * 4];
 	SQLRETURN result = SQLGetData(stmt->stmt, i, SQL_C_CHAR, &out, sizeof(char) * column->size, &size);
-	if (SQL_SUCCEEDED(result)) {
-		stmt->last = &out ;
-		return (char*)stmt->last;
-	}
-	else {
+	if (!SQL_SUCCEEDED(result)) {
 		column_fetch_error(stmt);
-		return out;
 	}
+	stmt->last = &out;
+	return (char*)stmt->last;
 }
 LIB_EXPORT int odbc_get_column_as_int(odbc_stmt_ptr stmt, int i) {
 	SQLINTEGER out;
 	SQLLEN size;
 	SQLRETURN result = SQLGetData(stmt->stmt, i, SQL_C_SLONG, &out, 10, &size);
 
-	if (SQL_SUCCEEDED(result)) {
+	if (!SQL_SUCCEEDED(result)) {
 
-		stmt->last = &out;
-		return *(int*)stmt->last;
-	}
-	else {
+		
+	
 		column_fetch_error(stmt);
 		// printf("Column fetch error: %s", odbc_get_errors(stmt->errors));
-		return -1;
+		
 	}
+	stmt->last = &out;
+		return *(int*)stmt->last;
 }
 LIB_EXPORT unsigned long int odbc_get_column_as_uint(odbc_stmt_ptr stmt, int i) {
 	SQLUINTEGER out;

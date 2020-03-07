@@ -59,7 +59,7 @@ class BasicTest {
 
 	public function test_insert() {
 		final insert = (record:{name:String, addressId:Int}) -> asserts.assert(try {
-			trace(cnx.request('INSERT INTO CUSTOMER (Name, AddressId) VALUES (\'${record.name}\', ${record.addressId})').getIntResult(1));
+			trace(cnx.request('INSERT INTO CUSTOMER (Name, AddressId) VALUES (\'${record.name}\', ${record.addressId})'));
 			true;
 		} catch (e:Dynamic) {
 			trace(e);

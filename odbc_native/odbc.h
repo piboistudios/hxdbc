@@ -60,12 +60,11 @@ extern "C" {
 	LIB_EXPORT SQLULEN odbc_get_column_size(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT SQLSMALLINT odbc_get_column_decimal_digits(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT SQLSMALLINT odbc_get_column_nullable(odbc_stmt_ptr stmt, int i);
-	LIB_EXPORT char* odbc_store_stmt(odbc_stmt_ptr stmt);
 	LIB_EXPORT int odbc_get_num_cols(odbc_stmt_ptr);
 	LIB_EXPORT bool odbc_fetch_next(odbc_stmt_ptr stmt);
 	LIB_EXPORT bool odbc_get_column_as_bool(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT char* odbc_get_column_as_string(odbc_stmt_ptr stmt, int i);
-	LIB_EXPORT unsigned char* odbc_get_column_as_bytes(int i, size_t *ret_size);
+	LIB_EXPORT unsigned char* odbc_get_column_as_bytes(odbc_stmt_ptr stmt, int i, size_t *ret_size);
 	LIB_EXPORT int odbc_get_column_as_int(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT unsigned long int odbc_get_column_as_uint(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT float odbc_get_column_as_float(odbc_stmt_ptr stmt, int i);

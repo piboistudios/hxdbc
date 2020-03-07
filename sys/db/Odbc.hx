@@ -61,9 +61,8 @@ class OdbcResultSet implements sys.db.ResultSet {
 				try {
 					if (boolTypes.indexOf(dt) != -1)
 						value = stmt.get_column_as_bool(i);
-					else if (true) {
-						stmt.store_stmt(); // see https://github.com/Aurel300/ammer/issues/32
-						value = bytes;
+					else if (true || binaryTypes.indexOf(dt) != -1) {
+						value = OdbcLib.get_column_as_bytes(stmt, i);
 					}
 					else if (floatTypes.indexOf(dt) != -1)
 						value = stmt.get_column_as_float(i);
