@@ -8,6 +8,19 @@ This project uses [`anvil`](https://github.com/piboistudios/anvil) to initialize
 
 The haxe compilation server may also build the native libraries for you, assuming you have run `VsDevCmd.bat` you should be able to build this, and any project depending on it, as if it were an ordinary Haxe project.
 
+## Platform Availability
+
+Right now, HxDBC only supports HashLink.
+Minimally, to use it, you need to specify the following in your `hxml`:
+```hxml
+-D hxmake-compiler=<whatever-your-hl-is-built-with>
+-D ammer.hl.hlLibrary=<wherever-your-hl-is>
+-D ammer.hl.hlInclude=<wherever-your-hl-is>/include  # (typically this is where it is anyways)
+-D anvil.output=where/you/want/the/hl # this should be where your hl files will output
+```
+
+And you will have to have `-hl where/you/want/the/hl` in your hxml; if you use any other targets, `hxdbc` won't build.
+
 ## Usage
 
 ```haxe
