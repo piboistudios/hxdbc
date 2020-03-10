@@ -107,15 +107,18 @@ class OdbcResultSet implements sys.db.ResultSet {
 		#end
 	}
 
-	public function getStringResult(n:Int):String {
+	public function getStringResult(n:Int):String @:privateAccess {
+		if(cache == null) r.fetch_next();
 		return r.get_column_as_string(n);
 	}
 
-	public function getIntResult(n:Int):Int {
+	public function getIntResult(n:Int):Int @:privateAccess {
+		if(cache == null) r.fetch_next();
 		return r.get_column_as_int(n);
 	}
 
-	public function getFloatResult(n:Int):Float {
+	public function getFloatResult(n:Int):Float @:privateAccess {
+		if(cache == null) r.fetch_next();
 		return r.get_column_as_float(n);
 	}
 
@@ -200,7 +203,8 @@ class OdbcConnection implements Connection {
 	}
 
 	public function lastInsertId() {
-		return request("select scope_identity()").getIntResult(1);
+		final req = request("select scope_identity()");
+		return req.getIntResult(1);
 	}
 
 	public function dbName() {
