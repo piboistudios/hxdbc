@@ -9,6 +9,10 @@
     "releasenotes": "Initial release",
     "contributors": ["piboistudios"],
     "dependencies": {
-        "ammer": ""
+        "ammer": "",
+        "anvil": "",
+        "hxmake": "",
+        "tink_cli": "",
+        "tink_chunk":""
     }
 }
