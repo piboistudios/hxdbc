@@ -14,8 +14,8 @@ Right now, HxDBC only supports HashLink.
 Minimally, to use it, you need to specify the following in your `hxml`:
 ```hxml
 -D hxmake-compiler=<whatever-your-hl-is-built-with>
--D ammer.hl.hlLibrary=<wherever-your-hl-is>
--D ammer.hl.hlInclude=<wherever-your-hl-is>/include  # (typically this is where it is anyways)
+-D ammer.hl.hlLibrary=<wherever-your-hl-install-is> # for example, for me it is C:\Desktop\hl-1.10.0-win
+-D ammer.hl.hlInclude=<wherever-your-hl-install-is>/include  # (typically this is where it is anyways), for me it is C:\Desktop\hl-1.10.0-win\include
 -D anvil.output=where/you/want/the/hl # this should be where your hl files will output
 ```
 
