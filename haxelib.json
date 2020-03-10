@@ -12,6 +12,11 @@
         "ammer": "",
         "anvil": "",
         "hxmake": "",
+        "tink_core": "",
+        "tink_macro": "",
+        "tink_io": "",
+        "tink_streams": "",
+        "tink_stringly": "",
         "tink_cli": "",
         "tink_chunk":""
     }
