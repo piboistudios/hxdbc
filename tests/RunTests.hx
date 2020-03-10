@@ -55,13 +55,13 @@ class BasicTest {
 		asserts.done();
 		return asserts;
 	}
-	#if mssql_server
+	
 	public function test_scope_identity() {
 		final scopeIdentity = cnx.lastInsertId();
 		trace(scopeIdentity);
 		return assert(scopeIdentity > 0);
 	}
-	#end
+	
 
 	public function test_select() {
 		return assert(attempt(trace(haxe.Json.stringify(cnx.request('SELECT * FROM CUSTOMER').results().array(), null, "    "))));

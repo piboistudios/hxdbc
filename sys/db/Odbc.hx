@@ -149,7 +149,7 @@ class OdbcConnection implements Connection {
 				final paramParts = param.split('=');
 				final paramName = paramParts[0];
 				final paramValue = paramParts[1];
-				map[paramName] = paramValue;
+				map[paramName.toUpperCase()] = paramValue != null ? paramValue.toUpperCase() : paramValue;
 				return map;
 			}, new Map<String, String>());
 		return _p;
@@ -201,14 +201,26 @@ class OdbcConnection implements Connection {
 		}
 		#end
 	}
-
+	
 	public function lastInsertId() {
-		final req = request("select scope_identity()");
+		final req = request(switch driver() {
+			case MSACCESS: 'select @@identity';
+			default: 'select scope_identity();';
+		});
 		return req.getIntResult(1);
 	}
 
 	public function dbName() {
 		return parameters["DATABASE"];
+	}
+	public function driverName() {
+		return parameters['DRIVER'];
+	}
+	public function driver() {
+		final driverName = driverName();
+		if(~/SQL Server/gi.match(driverName)) return OdbcDriver.MSSQL;
+		else if(~/Microsoft Access Driver/gi.match(driverName)) return OdbcDriver.MSACCESS;
+		else return OdbcDriver.OTHER;
 	}
 
 	public function startTransaction() {
@@ -228,4 +240,10 @@ class Odbc {
 	public static function connect(cnxStr):OdbcConnection @:privateAccess {
 		return new OdbcConnection(OdbcLib.connect(cnxStr));
 	}
+}
+
+enum abstract OdbcDriver(Int) {
+	var MSSQL = 1;
+	var MSACCESS = 2;
+	var OTHER = 3;
 }
