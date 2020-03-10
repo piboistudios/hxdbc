@@ -4,9 +4,7 @@ HxDBC is a native-extension library for the [ammer](https://github.com/Aurel300/
 The design was modeled after the existing [`sys.db.MySql`](https://github.com/HaxeFoundation/haxe/blob/4.0.5/std/hl/_std/sys/db/Mysql.hx) interface that exists for the HashLink platform.
 
 ## Building
-This project uses [`anvil`](https://github.com/piboistudios/anvil) to initialize; it will automatically build assuming the shell environment is set up and the user is running Windows and has MSVC installed; the user will need to run `haxelib` from a `VsDevCmd.bat` (Developer Command Prompt for VS 2019) shell environment.
-
-The haxe compilation server may also build the native libraries for you, assuming you have run `VsDevCmd.bat` you should be able to build this, and any project depending on it, as if it were an ordinary Haxe project.
+This project uses [`anvil`](https://github.com/piboistudios/anvil) to initialize with an [`hxmake`](https://github.com/piboistudios/hxmake) file; it will automatically build assuming the shell environment is set up and the user is running Windows and has set `-D hxmake-compiler` in your `hxml` file (by default, it will use GCC; this -may- work on Windows if you somehow built HashLink with GCC, but probably not, you should probably use `cl`).
 
 ## Platform Availability
 
