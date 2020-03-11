@@ -28,7 +28,7 @@ class OdbcStmtCtx extends Pointer<"odbc_stmt_t", OdbcLib> {
     public function get_num_cols(_:ammer.ffi.This):Int;
     public function fetch_next(_:ammer.ffi.This):Bool;
     public function get_column_as_bool(_:ammer.ffi.This, i:Int):Bool;
-    
+    public function get_num_rows(_:ammer.ffi.This):Int;
     public function get_column_as_string(_:ammer.ffi.This, i:Int):String;
     public function get_column_as_int(_:ammer.ffi.This, i:Int):Int;
     public function get_column_as_uint(_:ammer.ffi.This, i:Int):UInt;

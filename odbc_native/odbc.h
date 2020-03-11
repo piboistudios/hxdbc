@@ -70,8 +70,8 @@ extern "C" {
 	LIB_EXPORT float odbc_get_column_as_float(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT double odbc_get_column_as_double(odbc_stmt_ptr stmt, int i);
 	LIB_EXPORT int odbc_get_column_as_unix_timestamp(odbc_stmt_ptr stmt, int i);
+	LIB_EXPORT int odbc_get_num_rows(odbc_stmt_ptr stmt);
 	LIB_EXPORT bool odbc_disconnect(odbc_ctx_ptr);
-	LIB_EXPORT int test_sql();
 #ifdef __cplusplus
 }
 #endif

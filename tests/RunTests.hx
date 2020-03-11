@@ -6,6 +6,7 @@ import tink.unit.*;
 import tink.unit.Assert.assert;
 import sys.FileSystem;
 import Utils.attempt;
+
 using tink.CoreApi;
 using Lambda;
 
@@ -22,7 +23,7 @@ class BasicTest {
 
 	final dsn = 'DRIVER={Microsoft Access Driver (*.mdb)};DBQ=${sys.FileSystem.fullPath('../../db/Coyote.mdb')}';
 	var cnx:OdbcConnection;
-	 
+
 	public function test_connect() {
 		return assert(attempt(cnx = sys.db.Odbc.connect(dsn)));
 	}
@@ -40,12 +41,11 @@ class BasicTest {
 	}
 
 	public function test_insert() {
-		final insert = (record:{name:String, balance:Float}) -> asserts.assert(
-			attempt(cnx.request('INSERT INTO CUSTOMER (Name, Balance) VALUES (\'${record.name}\', ${record.balance})'))
-		);
-		final metaSyntacticVars = [
-			'foobar', 'foo', 'bar', 'baz', 'qux', 'quux'
-		];
+		final insert = (record:{name:String, balance:Float}) ->
+			asserts.assert(attempt({
+				cnx.request('INSERT INTO CUSTOMER (Name, Balance) VALUES (\'${record.name}\', ${record.balance})');
+			}));
+		final metaSyntacticVars = ['foobar', 'foo', 'bar', 'baz', 'qux', 'quux'];
 		final records = metaSyntacticVars.map(name -> ({
 			name: name,
 			balance: (Math.random() * 100000) - 50000
@@ -55,15 +55,23 @@ class BasicTest {
 		asserts.done();
 		return asserts;
 	}
-	
+
 	public function test_scope_identity() {
 		final scopeIdentity = cnx.lastInsertId();
 		trace(scopeIdentity);
-		return assert(scopeIdentity > 0);
+		return assert(scopeIdentity == 6);
 	}
-	
 
-	public function test_select() {
-		return assert(attempt(trace(haxe.Json.stringify(cnx.request('SELECT * FROM CUSTOMER').results().array(), null, "    "))));
+	public function test_select_and_row_count() {
+		asserts = new AssertionBuffer();
+		var resultSet:sys.db.OdbcResultSet = null;
+		asserts.assert(attempt(resultSet = cnx.request('SELECT * FROM CUSTOMER')));
+		// see https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/sqlrowcount-function?view=sql-server-ver15
+		// asserts.assert(resultSet.length == 6);
+		asserts.assert(attempt(cnx.request('SELECT COUNT(*) FROM CUSTOMER').results().length == 6));
+		final jsonResults = haxe.Json.stringify(resultSet.results().array(), null, "\t");
+		trace(jsonResults);
+		asserts.done();
+		return asserts;
 	}
 }

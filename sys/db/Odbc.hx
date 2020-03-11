@@ -11,20 +11,24 @@ class SizeOfReturn {
 }
 
 class OdbcResultSet implements sys.db.ResultSet {
+	/**
+	 * NOTE: Behavior is driver-specific (i.e. undefined-ish) if this is a ResultSet from a SELECT statement.
+	 */
 	public var length(get, null):Int;
 	public var nfields(get, null):Int;
 
 	private var r:OdbcStmtCtx;
 	private var cache:Dynamic;
+	private var cnx:OdbcConnection;
 
-	function new(r:OdbcStmtCtx) {
+	function new(r:OdbcStmtCtx, c:OdbcConnection) {
 		if (r.query_failed())
 			throw r.get_stmt_errors();
 		this.r = r;
+		this.cnx = c;
 	}
-
 	private function get_length() {
-		return 0; // TODO: odbc_get_num_rows
+		return r.get_num_rows();
 	}
 
 	private function get_nfields() {
@@ -108,17 +112,20 @@ class OdbcResultSet implements sys.db.ResultSet {
 	}
 
 	public function getStringResult(n:Int):String @:privateAccess {
-		if(cache == null) r.fetch_next();
+		if (cache == null)
+			r.fetch_next();
 		return r.get_column_as_string(n);
 	}
 
 	public function getIntResult(n:Int):Int @:privateAccess {
-		if(cache == null) r.fetch_next();
+		if (cache == null)
+			r.fetch_next();
 		return r.get_column_as_int(n);
 	}
 
 	public function getFloatResult(n:Int):Float @:privateAccess {
-		if(cache == null) r.fetch_next();
+		if (cache == null)
+			r.fetch_next();
 		return r.get_column_as_float(n);
 	}
 
@@ -171,7 +178,7 @@ class OdbcConnection implements Connection {
 	}
 
 	public function request(s:String) @:privateAccess {
-		return new OdbcResultSet(h.execute(s));
+		return new OdbcResultSet(h.execute(s), this);
 	}
 
 	public function escape(s:String) {
@@ -201,10 +208,12 @@ class OdbcConnection implements Connection {
 		}
 		#end
 	}
-	
+
+	// TODO: Get correct syntax for each driver
 	public function lastInsertId() {
-		final req = request(switch driver() {
-			case MSACCESS: 'select @@identity';
+		final req = request(switch driver {
+			case MsAccess: 'select @@identity';
+			case SqlLite: 'select last_insert_rowid()';
 			default: 'select scope_identity();';
 		});
 		return req.getIntResult(1);
@@ -213,14 +222,28 @@ class OdbcConnection implements Connection {
 	public function dbName() {
 		return parameters["DATABASE"];
 	}
+
 	public function driverName() {
 		return parameters['DRIVER'];
 	}
-	public function driver() {
-		final driverName = driverName();
-		if(~/SQL Server/gi.match(driverName)) return OdbcDriver.MSSQL;
-		else if(~/Microsoft Access Driver/gi.match(driverName)) return OdbcDriver.MSACCESS;
-		else return OdbcDriver.OTHER;
+
+	public var driver(get, never):OdbcDriver; 
+
+	var _driver:OdbcDriver;
+
+	public function get_driver() {
+		if (_driver == null) {
+			final driverName = driverName();
+			if (~/SQL Server/gi.match(driverName))
+				_driver = MsSql;
+			else if (~/Microsoft Access Driver/gi.match(driverName))
+				_driver = MsAccess;
+			else if (~/SQLite/gi.match(driverName))
+				_driver = SqlLite;
+			else
+				_driver = Other;
+		}
+		return _driver;
 	}
 
 	public function startTransaction() {
@@ -242,8 +265,10 @@ class Odbc {
 	}
 }
 
-enum abstract OdbcDriver(Int) {
-	var MSSQL = 1;
-	var MSACCESS = 2;
-	var OTHER = 3;
+// TODO: Expand list of drivers
+enum abstract OdbcDriver(Null<Int>) {
+	var MsSql = 1;
+	var MsAccess = 2;
+	var SqlLite = 4;
+	var Other = 99;
 }

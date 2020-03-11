@@ -307,51 +307,17 @@ LIB_EXPORT int odbc_get_column_as_unix_timestamp(odbc_stmt_ptr stmt, int i) {
 		return 0;
 	}
 }
+
+LIB_EXPORT int odbc_get_num_rows(odbc_stmt_ptr stmt) {
+	SQLLEN ret;
+	SQLRowCount(stmt, &ret);
+	printf("ret: %ld\r\n", ret);
+	return ret;
+}
+
 LIB_EXPORT bool odbc_disconnect(odbc_ctx_ptr ctx) {
 	SQLDisconnect(ctx->dbc);
 	SQLFreeHandle(SQL_HANDLE_DBC, ctx->dbc);
 	SQLFreeHandle(SQL_HANDLE_ENV, ctx->env);
 	return true;
 }
-
-LIB_EXPORT int test_sql() {
-	SQLHENV env;
-	SQLCHAR driver[256];
-	SQLCHAR attr[256];
-	SQLSMALLINT driver_ret;
-	SQLSMALLINT attr_ret;
-	SQLUSMALLINT direction;
-	SQLRETURN ret;
-
-	SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
-	SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
-
-	direction = SQL_FETCH_FIRST;
-	while (SQL_SUCCEEDED(ret = SQLDrivers(env, direction,
-		driver, sizeof(driver), &driver_ret,
-		attr, sizeof(attr), &attr_ret))) {
-		direction = SQL_FETCH_NEXT;
-		// printf("%s - %s - %s - %s\n", (char*)driver, (char*)attr, sizeof(driver), sizeof(ret));
-		// if (ret == SQL_SUCCESS_WITH_INFO) // printf("\tdata truncation\n");
-	}
-	return 0;
-}
-
-
-// BOOL APIENTRY DllMain(HMODULE hModule,
-// 	DWORD  ul_reason_for_call,
-// 	LPVOID lpReserved
-// )
-// {
-// 	switch (ul_reason_for_call)
-// 	{
-// 	case DLL_PROCESS_ATTACH:
-// 		// printf("ODBC attached w00t!\n");
-// 	case DLL_THREAD_ATTACH:
-// 	case DLL_THREAD_DETACH:
-// 	case DLL_PROCESS_DETACH:
-// 		break;
-// 	}
-// 	return TRUE;
-// }
-
