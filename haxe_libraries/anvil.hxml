@@ -1,4 +1,4 @@
 -D anvil=0.0.1
-# @install: lix --silent download "gh://github.com/piboistudios/anvil#11ac51edde26e0a83bf8b58560db622e82afb250" into anvil/0.0.1/github/11ac51edde26e0a83bf8b58560db622e82afb250
+# @install: lix --silent download "gh://github.com/piboistudios/anvil#1c2473dc025696789714b94a31e3e92bce73f839" into anvil/0.0.1/github/1c2473dc025696789714b94a31e3e92bce73f839
 -lib hxmake
--cp ${HAXE_LIBCACHE}/anvil/0.0.1/github/11ac51edde26e0a83bf8b58560db622e82afb250/./
+-cp ${HAXE_LIBCACHE}/anvil/0.0.1/github/1c2473dc025696789714b94a31e3e92bce73f839/./
