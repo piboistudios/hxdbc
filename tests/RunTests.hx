@@ -21,7 +21,7 @@ class BasicTest {
 
 	public function new() {}
 
-	final dsn = 'DRIVER={Microsoft Access Driver (*.mdb)};DBQ=${sys.FileSystem.fullPath('../../db/Coyote.mdb')}';
+	final dsn = 'DRIVER={Microsoasdfadsfadfasdfft Access Driver (*.mdb)};DBQ=${sys.FileSystem.fullPath('../../db/Coyote.mdb')}';
 	var cnx:OdbcConnection;
 
 	public function test_connect() {

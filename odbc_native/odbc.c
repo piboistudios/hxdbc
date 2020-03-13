@@ -90,7 +90,6 @@ LIB_EXPORT bool odbc_query_failed(odbc_stmt_ptr stmt) {
 	return stmt->failed_to_execute;
 }
 char* odbc_get_errors(odbc_errors_ptr ctx) {
-	char ret_val[2048];
 	for (int i = 0; i < ctx->num_errors; i++) {
 
 		sprintf_s(ctx->error_str, sizeof(ctx->error_str), ctx->errors[i]);
